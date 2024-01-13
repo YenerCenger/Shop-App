@@ -32,6 +32,8 @@ class Product(db.Model):
     alis_fiyat = db.Column(db.Integer, nullable=False)
     satis_fiyat = db.Column(db.Integer, nullable=False)
     date = db.Column(db.DateTime, default=datetime.utcnow)
+    ekleyen = db.Column(db.String, nullable=False)
+
 # Kullanıcı Class'ı
 
 class User(db.Model):
@@ -56,8 +58,9 @@ def products():
 @app.route("/dashboard")
 @login_required
 def dashboard():
-    products = Product.query.all()
-    return render_template("dashboard.html",products=products)
+    current_user_username = session["username"]
+    user_products = Product.query.filter_by(ekleyen=current_user_username).all()
+    return render_template("dashboard.html", products=user_products)
 
 # Hesap
 @app.route("/account")
@@ -135,9 +138,10 @@ def addproduct():
     isim = request.form.get("isim")
     alis_fiyat = request.form.get("alis_fiyat")
     satis_fiyat = request.form.get("satis_fiyat")
+    ekleyen = session["username"]
 
     if (request.method == "POST"):
-        newProduct = Product(isim=isim,alis_fiyat=alis_fiyat,satis_fiyat=satis_fiyat)
+        newProduct = Product(isim=isim,alis_fiyat=alis_fiyat,satis_fiyat=satis_fiyat,ekleyen=ekleyen)
         db.session.add(newProduct)
         db.session.commit()
         flash("Ürün başarıyla eklendi.","success")
@@ -147,6 +151,7 @@ def addproduct():
     
 # Ürün Güncelleme
 @app.route("/edit/<string:id>",methods = ["GET","POST"])
+@login_required
 def edit(id):
     product = Product.query.get(id)
     if (request.method == "POST"):
@@ -166,6 +171,7 @@ def edit(id):
 
 # Ürün Sil
 @app.route("/delete/<int:id>")
+@login_required
 def delete(id):
     product = Product.query.get(id)
 
@@ -178,7 +184,7 @@ def delete(id):
 
     return redirect(url_for("products"))
 
-# Arama URL
+# Products Arama URL
 @app.route("/search", methods=["GET", "POST"])
 @login_required
 def search():
@@ -194,6 +200,24 @@ def search():
             return redirect(url_for('products'))
         else:
             return render_template('products.html', products=products)
+
+# Dashboard Arama URL
+@app.route("/search_dashboard", methods=["GET", "POST"])
+@login_required
+def search_dashboard():
+    if request.method == "GET":
+        return redirect(url_for("index"))
+    else:
+        keyword = request.form.get("keyword")
+
+        products = Product.query.filter(Product.isim.ilike(f'%{keyword}%')).all()
+
+        if not products:
+            flash('Aranan kelimeye uygun ürün bulunamadı...', 'warning')
+            return redirect(url_for('dashboard'))
+        else:
+            return render_template('dashboard.html', products=products)
+
 
 # Ürün Ekranı
 @app.route("/product/<string:id>")
