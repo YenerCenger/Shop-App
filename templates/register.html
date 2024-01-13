@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+{% from "includes/formhelpers.html" import render_field %}
+
+<h3>Kayıt Ol</h3>
+<hr>
+<form method="post" action="/register">
+  <div class="form-group">
+    <label for="exampleInputEmail1">İsim Soyisim:</label>
+    <input type="text" class="form-control" name="name" id="exampleInputEmail1" placeholder="Ad Soyad">
+  </div>
+  <div class="form-group">
+    <label for="username">Kullanıcı Adı:</label>
+    <input type="text" class="form-control" name="username" id="username" placeholder="Kullanıcı Adı">
+  </div>
+  <div class="form-group">
+    <label for="mail">Email Adresi:</label>
+    <input type="email" class="form-control" name="email" id="mail" placeholder="Email Adresi">
+  </div>
+  <div class="form-group">
+    <label for="password">Parola:</label>
+    <input type="password" class="form-control" name="password" id="password" placeholder="Parola">
+  </div>
+  <div class="form-group">
+    <label for="confirm">Parola Kontrol:</label>
+    <input type="password" class="form-control" name="confirm" id="confirm" placeholder="Parola Kontrol">
+  </div>
+  <button type="submit" class="btn btn-primary">Giriş Yap</button>
+</form>
+{% endblock body %}

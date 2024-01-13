@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<h3>Ürünlerim</h3>
+<hr>
+{% if products %}
+<form action="/search" method = "post">
+<input class="form-control-lg form-control-borderless" type="search" name = "keyword" placeholder="Ara...">
+<button class="btn btn-dark btn-lg" type="submit">Ara</button>
+</form>
+<hr>
+
+<ul class="list-group">
+    {% for product in products %}
+    <li class = "list-group-item"><a href="/product/{{product.id}}">{{product.isim}}</a></li>
+    {% endfor %}
+</ul>
+{% else %}
+
+<div class = "alert alert-danger">Henüz bir ürün eklemediniz...</div>
+{% endif %}
+
+{% endblock body %}

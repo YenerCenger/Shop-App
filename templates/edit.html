@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block body %}
+<h3>Ürün Güncelle</h3>
+<hr>
+<form method="post" action="{{ url_for('edit', id=product.id) }}">
+  <div class="form-group">
+    <label for="isim">İsim:</label>
+    <input type="text" class="form-control" name="isim" id="isim" placeholder="Ürünün Adı" value="{{ product.isim }}">
+  </div>
+  <div class="form-group">
+    <label for="alis">Alış Fiyatı:</label>
+    <input type="text" class="form-control" name="alis_fiyat" id="alis" placeholder="Ürünün Alış fiyatı" value="{{ product.alis_fiyat }}">
+  </div>
+  <div class="form-group">
+    <label for="satis">Satış Fiyatı:</label>
+    <input type="text" class="form-control" name="satis_fiyat" id="satis" placeholder="Ürünün Satış fiyatı" value="{{ product.satis_fiyat }}">
+  </div>
+  <button type="submit" class="btn btn-primary">Güncelle</button>
+</form>
+{% endblock body %}

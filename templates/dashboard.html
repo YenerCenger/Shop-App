@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<h3>Kontrol Paneli</h3>
+<hr>
+<a href="/addproduct" class="btn btn-danger">Ürün Ekle</a>
+<hr>
+{% if products %}
+    <table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">id</th>
+      <th scope="col">İsim</th>
+      <th scope="col">Alış Fiyatı</th>
+      <th scope="col">Satış Fiyatı</th>
+      <th scope="col">Tarih</th>
+      <th scope="col"></th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for product in products %}
+    <tr>
+        <th scope="row">{{product.id}}</th>
+        <td><a href="/product/{{product.id}}">{{product.isim}}</a></td>
+        <td>{{product.alis_fiyat}}</td>
+        <td>{{product.satis_fiyat}}</td>
+        <td>{{ product.date.strftime('%m-%d-%Y') }}</td>
+        <td><a href="/edit/{{product.id}}" class = "btn btn-dark">Güncelle</a></td>
+        <td><a href="/delete/{{product.id}}" class = "btn btn-danger">Sil</a></td>
+
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="alert alert-danger">Henüz bir ürün eklemediniz.</div>
+{% endif %}
+
+
+{% endblock body %}
